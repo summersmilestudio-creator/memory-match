@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
 
-void main() {
+import 'screens/home_screen.dart';
+import 'services/store.dart';
+import 'services/ads_service.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Store.init();
+  await AdsService.instance.initialize();
   runApp(const MemoryApp());
 }
 
@@ -11,7 +17,7 @@ class MemoryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Memory Match',
+      title: 'Memory Match Cards',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
