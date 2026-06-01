@@ -7,14 +7,13 @@ class AdsService {
   AdsService._();
   static final AdsService instance = AdsService._();
 
-  // iOS = real AdMob units. Android = TEST ids (no real Android units yet).
-  // TODO: replace Android prod ids with real units once created in AdMob console.
+  // iOS + Android = real AdMob units.
   static const String _bannerIOS = 'ca-app-pub-5549243085914479/4921760002';
   static const String _interstitialIOS = 'ca-app-pub-5549243085914479/2026865287';
   static const String _rewardedIOS = 'ca-app-pub-5549243085914479/2211836186';
-  static const String _bannerAndroid = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _interstitialAndroid = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _rewardedAndroid = 'ca-app-pub-3940256099942544/5224354917';
+  static const String _bannerAndroid = 'ca-app-pub-5549243085914479/5198294858';
+  static const String _interstitialAndroid = 'ca-app-pub-5549243085914479/1259049842';
+  static const String _rewardedAndroid = 'ca-app-pub-5549243085914479/9563395367';
 
   static const String _bannerTest = 'ca-app-pub-3940256099942544/6300978111';
   static const String _interstitialTest = 'ca-app-pub-3940256099942544/1033173712';

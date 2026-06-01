@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../widgets/banner_ad_widget.dart';
 import '../services/ads_service.dart';
+import '../widgets/game_juice.dart';
 import 'package:flutter/services.dart';
 
 import '../data/grids.dart';
@@ -188,6 +189,15 @@ class _GameScreenState extends State<GameScreen> {
             },
             child: const Text('Înapoi'),
           ),
+          TextButton.icon(
+            icon: const Icon(Icons.play_circle, color: Color(0xFFFFD740)),
+            label: const Text('+30s 🎁',
+                style: TextStyle(color: Color(0xFFFFD740))),
+            onPressed: () async {
+              Navigator.pop(c);
+              await _watchAdForBonusTime();
+            },
+          ),
           FilledButton(
             onPressed: () {
               Navigator.pop(c);
@@ -205,6 +215,7 @@ class _GameScreenState extends State<GameScreen> {
     _timer?.cancel();
     HapticFeedback.heavyImpact();
     AdsService.instance.maybeShowInterstitial();
+    Celebrate.show(context);
 
     await Store.addMatches(_matches);
     await Store.incGamesPlayed();
@@ -325,6 +336,48 @@ class _GameScreenState extends State<GameScreen> {
     return '${n.year}-${n.month.toString().padLeft(2, '0')}-${n.day.toString().padLeft(2, '0')}';
   }
 
+  Future<void> _watchAdForBonusTime() async {
+    final got = await AdsService.instance.showRewarded();
+    if (!mounted || !got) return;
+    setState(() {
+      _finished = false;
+      _remaining += 30;
+    });
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (_finished || !mounted) return;
+      setState(() {
+        _seconds++;
+        if (_isTimeAttack) {
+          _remaining--;
+          if (_remaining <= 0) _lose();
+        }
+      });
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('🎁 +30 secunde bonus! Continuă jocul.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  Future<void> _watchAdToSkip() async {
+    if (_finished) return;
+    final got = await AdsService.instance.showRewarded();
+    if (!mounted || !got) return;
+    setState(() {
+      for (final c in _cards) {
+        if (!c.matched) {
+          c.matched = true;
+          c.flipped = true;
+        }
+      }
+      _matches = grid.pairs;
+    });
+    await _win();
+  }
+
   Widget _row(String k, String v) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Row(
@@ -345,6 +398,11 @@ class _GameScreenState extends State<GameScreen> {
         backgroundColor: _purple,
         foregroundColor: Colors.white,
         actions: [
+          IconButton(
+            tooltip: 'Sari peste nivel (urmărește reclamă)',
+            icon: const Icon(Icons.skip_next, color: Color(0xFF69F0AE)),
+            onPressed: _watchAdToSkip,
+          ),
           IconButton(
             tooltip: 'Reîncepe',
             onPressed: _restart,
