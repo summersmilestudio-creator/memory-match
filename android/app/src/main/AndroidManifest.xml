@@ -6,7 +6,7 @@
         android:icon="@mipmap/launcher_icon">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-5549243085914479~3128637502"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -46,4 +46,5 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 </manifest>

@@ -4,6 +4,7 @@ import '../widgets/banner_ad_widget.dart';
 import '../data/grids.dart';
 import '../data/themes.dart';
 import '../models/game_config.dart';
+import '../services/purchase_service.dart';
 import '../services/store.dart';
 import 'achievements_screen.dart';
 import 'game_screen.dart';
@@ -23,6 +24,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   void _refresh() => setState(() {});
+
+  void _showRemoveAdsDialog() {
+    final ps = PurchaseService.instance;
+    final price = ps.productFor(PurchaseService.noAdsId)?.price ?? '15 lei';
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        title: const Text('Fără reclame',
+            style: TextStyle(color: _purple, fontWeight: FontWeight.w900)),
+        content: const Text(
+          'Joacă fără bannere și fără reclame care te întrerup. O singură dată, pentru totdeauna.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              ps.restore();
+            },
+            child: const Text('Restaurează',
+                style: TextStyle(color: Colors.black54)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _purple,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              ps.buy(PurchaseService.noAdsId);
+            },
+            child: Text('Cumpără • $price',
+                style: const TextStyle(fontWeight: FontWeight.w800)),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _openMode(GameMode mode) async {
     if (mode == GameMode.daily) {
@@ -65,14 +104,17 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              const Text(
-                'MEMORY\nMATCH',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 46,
-                  fontWeight: FontWeight.w900,
-                  color: _purple,
-                  height: 1.0,
+              const FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'PAIR MATCH\nCARDS',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 46,
+                    fontWeight: FontWeight.w900,
+                    color: _purple,
+                    height: 1.0,
+                  ),
                 ),
               ),
               const SizedBox(height: 6),
@@ -145,6 +187,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 16),
+              ValueListenableBuilder<bool>(
+                valueListenable: PurchaseService.instance.noAdsNotifier,
+                builder: (context, noAds, _) {
+                  if (noAds) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: TextButton.icon(
+                      onPressed: _showRemoveAdsDialog,
+                      icon: const Icon(Icons.block, color: _purple, size: 20),
+                      label: const Text('Fără reclame',
+                          style: TextStyle(
+                              color: _purple, fontWeight: FontWeight.w600)),
+                    ),
+                  );
+                },
+              ),
               if (Store.streak > 1)
                 Text('🔥 Serie: ${Store.streak} zile',
                     textAlign: TextAlign.center,

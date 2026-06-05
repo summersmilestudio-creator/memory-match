@@ -43,3 +43,18 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# --- artifacts & store assets (not needed for build) ---
+*.aab
+*.ipa
+/_*.png
+/play_*.png
+/play_feature_graphic*.png
+/play_icon_512.png
+/store/
+/play_real/
+/play_screenshots/
+/game_center_icons/
+/play_listing.json
+/play_metadata.json
+/.metadata

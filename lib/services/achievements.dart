@@ -26,7 +26,7 @@ const List<Achievement> kAchievements = [
   Achievement('no_mistakes', 'Impecabil',
       'Termină un nivel fără nicio greșeală.', '✨'),
   Achievement('streak_7', '7 zile la rând',
-      'Joacă Memory Match 7 zile consecutiv.', '🔥'),
+      'Joacă Pair Match 7 zile consecutiv.', '🔥'),
   Achievement('memory_master', 'Maestru al memoriei',
       'Termină cel mai greu nivel (8×6).', '👑'),
 ];
