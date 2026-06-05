@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <application
-        android:label="Memory Match Cards"
+        android:label="Pair Match Cards"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <meta-data

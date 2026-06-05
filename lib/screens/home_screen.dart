@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 6),
               const Text(
-                'Antrenează-ți memoria · joacă offline',
+                'Găsește perechile · joacă offline',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black54),
               ),
