@@ -10,15 +10,17 @@ class PurchaseService {
 
   static const String noAdsId = 'noads';
 
+  // App Store Connect product ID for the iOS Remove Ads IAP. This is fixed once
+  // created in ASC and cannot be renamed, so the code must match it exactly.
+  static const String _iosNoAdsId = 'memorymatch_remove_ads';
+
   static const _kNoAdsKey = 'noAds_memory';
 
   static String _platformId(String logicalId) =>
-      Platform.isIOS ? '${logicalId}_memory' : logicalId;
+      Platform.isIOS ? _iosNoAdsId : logicalId;
 
   static String _logicalId(String platformId) =>
-      platformId.endsWith('_memory')
-          ? platformId.substring(0, platformId.length - 7)
-          : platformId;
+      platformId == _iosNoAdsId ? noAdsId : platformId;
 
   final InAppPurchase _iap = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _sub;
