@@ -337,7 +337,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> _watchAdForBonusTime() async {
-    final got = await AdsService.instance.showRewarded();
+    final got = await AdsService.instance.showBonusAd();
     if (!mounted || !got) return;
     setState(() {
       _finished = false;
@@ -364,7 +364,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _watchAdToSkip() async {
     if (_finished) return;
-    final got = await AdsService.instance.showRewarded();
+    final got = await AdsService.instance.showBonusAd();
     if (!mounted || !got) return;
     setState(() {
       for (final c in _cards) {
